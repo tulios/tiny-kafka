@@ -1,0 +1,16 @@
+{
+  "name": "tiny-kafka",
+  "license": "MIT",
+  "scripts": {
+    "test:local": "NODE_ENV=test ./node_modules/.bin/jest --forceExit --detectOpenHandles",
+    "test:local:watch": "yarn test:local --watch"
+  },
+  "dependencies": {
+    "glob": "^7.1.2",
+    "kafkajs": ">= 1.3.1 < 2.0.0",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "jest": "^23.5.0"
+  }
+}
