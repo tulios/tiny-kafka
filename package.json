@@ -1,6 +1,20 @@
 {
   "name": "tiny-kafka",
+  "version": "0.1.0",
+  "description": "",
+  "author": "Tulio Ornelas <ornelas.tulio@gmail.com>",
   "license": "MIT",
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tulios/tiny-kafka.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tulios/tiny-kafka/issues"
+  },
+  "homepage": "https://github.com/tulios/tiny-kafka",
   "scripts": {
     "test:local": "NODE_ENV=test ./node_modules/.bin/jest --forceExit --detectOpenHandles",
     "test:local:watch": "yarn test:local --watch"
