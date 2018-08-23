@@ -16,8 +16,11 @@
   },
   "homepage": "https://github.com/tulios/tiny-kafka",
   "scripts": {
-    "test:local": "NODE_ENV=test ./node_modules/.bin/jest --forceExit --detectOpenHandles",
+    "test:local": "NODE_ENV=test ./node_modules/.bin/jest src/ --forceExit --detectOpenHandles",
     "test:local:watch": "yarn test:local --watch"
+  },
+  "bin": {
+    "tink-kafka": "./bin/tiny-kafka"
   },
   "dependencies": {
     "glob": "^7.1.2",
