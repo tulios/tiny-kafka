@@ -2,17 +2,19 @@ const { Metadata: apiKey } = require('../../apiKeys')
 const { NAMESPACES } = require('../../../store')
 
 const versions = {
+  1: require('./v1'),
   2: require('./v2'),
 }
 
 const requestDecoders = {
+  1: require('./v1/request'),
   2: require('./v2/request'),
 }
 
 module.exports = () => ({
   apiKey,
   versions: {
-    minVersion: 2,
+    minVersion: 1,
     maxVersion: 2,
   },
   encode: async ({ store, apiVersion, payload }) => {
