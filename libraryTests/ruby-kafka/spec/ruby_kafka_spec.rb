@@ -12,6 +12,15 @@ RSpec.describe('ruby-kafka') do
     Thread.kill(@pid)
   end
 
+  it 'create topic' do
+    kafka = Kafka.new(
+      ['localhost:9092'],
+      client_id: 'tiny-kafka-lib-ruby-kafka'
+    )
+
+    kafka.create_topic("topic")
+  end
+
   it 'produce' do
     kafka = Kafka.new(
       ['localhost:9092'],
