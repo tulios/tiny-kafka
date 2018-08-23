@@ -2,17 +2,19 @@ const { CreateTopics: apiKey } = require('../../apiKeys')
 const { NAMESPACES } = require('../../../store')
 
 const versions = {
+  0: require('./v0'),
   1: require('./v1'),
 }
 
 const requestDecoders = {
+  0: require('./v0/request'),
   1: require('./v1/request'),
 }
 
 module.exports = () => ({
   apiKey,
   versions: {
-    minVersion: 1,
+    minVersion: 0,
     maxVersion: 1,
   },
   encode: async ({ store, apiVersion, payload }) => {

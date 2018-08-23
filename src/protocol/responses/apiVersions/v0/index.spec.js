@@ -11,7 +11,7 @@ describe('Protocol > Responses > ApiVersions > v0', () => {
         { apiKey: 0, maxVersion: 3, minVersion: 2 },
         { apiKey: 3, maxVersion: 2, minVersion: 1 },
         { apiKey: 18, maxVersion: 0, minVersion: 0 },
-        { apiKey: 19, maxVersion: 1, minVersion: 1 },
+        { apiKey: 19, maxVersion: 1, minVersion: 0 },
       ],
       errorCode: 0,
     })
