@@ -14,16 +14,16 @@ const BEL = String.fromCharCode(7)
 const API_KEY_IDS = Object.keys(apiKeys)
 const getApiNameByKey = apiKey => API_KEY_IDS.find(key => apiKeys[key] === apiKey)
 
+const setProcessTitle = () => (process.title = 'TinyKafka')
+const setTerminalTitle = () => process.stdout.write(ESCAPE + ']0;' + process.title + BEL)
+
 const PRIVATE = {
   NET_SERVER: Symbol('private:netServer'),
   STORE: Symbol('private:store'),
 }
 
-const setProcessTitle = () => (process.title = 'TinyKafka')
-const setTerminalTitle = () => process.stdout.write(ESCAPE + ']0;' + process.title + BEL)
-
 module.exports = class Server {
-  constructor({ host = '0.0.0.0', port = 9090 } = {}) {
+  constructor({ host = '0.0.0.0', port = 9092 } = {}) {
     this.host = host
     this.port = port
 
@@ -128,17 +128,22 @@ module.exports = class Server {
     console.log(`-> ${logHeader} ${requestSize} bytes, request: ${incomingRequestLog}`)
     console.log(`-> ${logHeader}`, JSON.stringify(request.payload))
 
-    const responseBuffer = await ResponseEncoder(this[PRIVATE.STORE], request)
+    try {
+      const responseBuffer = await ResponseEncoder(this[PRIVATE.STORE], request)
 
-    const responseEncoder = new Encoder()
-      .writeInt32(request.correlationId)
-      .writeBuffer(responseBuffer)
+      const responseEncoder = new Encoder()
+        .writeInt32(request.correlationId)
+        .writeBuffer(responseBuffer)
 
-    const { buffer } = new Encoder()
-      .writeInt32(responseEncoder.size())
-      .writeEncoder(responseEncoder)
+      const { buffer } = new Encoder()
+        .writeInt32(responseEncoder.size())
+        .writeEncoder(responseEncoder)
 
-    console.log(`<- ${logHeader} sending ${responseEncoder.size()} bytes`)
-    socket.write(buffer)
+      console.log(`<- ${logHeader} sending ${responseEncoder.size()} bytes`)
+      socket.write(buffer)
+    } catch (e) {
+      console.error(`X ${logHeader}`, e)
+      socket.destroy(e)
+    }
   }
 }
