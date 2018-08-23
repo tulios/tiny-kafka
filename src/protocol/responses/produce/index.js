@@ -3,17 +3,19 @@ const { NAMESPACES } = require('../../../store')
 
 const versions = {
   2: require('./v2'),
+  3: require('./v3'),
 }
 
 const requestDecoders = {
   2: require('./v2/request'),
+  3: require('./v3/request'),
 }
 
 module.exports = () => ({
   apiKey,
   versions: {
     minVersion: 2,
-    maxVersion: 2,
+    maxVersion: 3,
   },
   encode: async ({ store, apiVersion, payload }) => {
     const topicsStore = store.get(NAMESPACES.TOPICS)
@@ -27,7 +29,8 @@ module.exports = () => ({
 
       for (let { partition, messages } of partitions) {
         const currentMessages = topicStore.partitions[partition] || []
-        const storedMessages = [...currentMessages, ...messages]
+        const producedMessages = messages.records ? messages.records : messages
+        const storedMessages = [...currentMessages, ...producedMessages]
 
         topicStore.partitions = { ...topicStore.partitions, [partition]: storedMessages }
 
