@@ -7,19 +7,13 @@ describe('Protocol > Responses > ApiVersions > v0', () => {
     const decoded = await decodeV0(buffer)
 
     expect(decoded).toEqual({
-      errorCode: 0,
       apiVersions: [
-        {
-          apiKey: 3,
-          maxVersion: 2,
-          minVersion: 2,
-        },
-        {
-          apiKey: 18,
-          maxVersion: 0,
-          minVersion: 0,
-        },
+        { apiKey: 0, maxVersion: 2, minVersion: 2 },
+        { apiKey: 3, maxVersion: 2, minVersion: 2 },
+        { apiKey: 18, maxVersion: 0, minVersion: 0 },
+        { apiKey: 19, maxVersion: 1, minVersion: 1 },
       ],
+      errorCode: 0,
     })
   })
 })
