@@ -1,0 +1,35 @@
+language: node_js
+dist: trusty
+sudo: required
+
+node_js:
+  - '8'
+
+services:
+  - docker
+
+branches:
+  only:
+    - master
+    - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
+
+jobs:
+  include:
+    - stage: test
+      name: 'Unit tests'
+      script:
+        - env
+        - yarn install
+        - yarn test
+    - stage: test
+      name: 'Library tests: KafkaJS'
+      script:
+        - env
+        - ./bin/buildLibraryTests.sh kafkajs
+        - ./bin/runLibraryTests.sh kafkajs
+    - stage: test
+      name: 'Library tests: ruby_kafka'
+      script:
+        - env
+        - ./bin/buildLibraryTests.sh ruby_kafka
+        - ./bin/runLibraryTests.sh ruby_kafka
