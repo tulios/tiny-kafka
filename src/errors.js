@@ -14,7 +14,16 @@ class UnsupporterAPIError extends TinyKafkaError {
   }
 }
 
+class UnsupporterAPIVersionError extends TinyKafkaError {
+  constructor(apiKey, apiVersion) {
+    super(new Error(`Unsupported API version apiKey: ${apiKey}, apiVersion: ${apiVersion}`))
+    this.apiKey = apiKey
+    this.apiVersion = apiVersion
+  }
+}
+
 module.exports = {
   TinyKafkaError,
   UnsupporterAPIError,
+  UnsupporterAPIVersionError,
 }

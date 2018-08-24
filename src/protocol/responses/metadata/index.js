@@ -1,5 +1,6 @@
 const { Metadata: apiKey } = require('../../apiKeys')
 const { NAMESPACES } = require('../../../store')
+const { UnsupporterAPIVersionError } = require('../../../errors')
 
 const versions = {
   1: require('./v1'),
@@ -18,6 +19,10 @@ module.exports = () => ({
     maxVersion: 2,
   },
   encode: async ({ store, apiVersion, payload }) => {
+    if (!versions[apiVersion]) {
+      throw new UnsupporterAPIVersionError(apiKey, apiVersion)
+    }
+
     const broker = store.get(NAMESPACES.BROKER)
     const topicsStore = store.get(NAMESPACES.TOPICS)
     const clusterId = store.get(NAMESPACES.CLUSTER_ID)

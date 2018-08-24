@@ -1,5 +1,6 @@
 const { CreateTopics: apiKey } = require('../../apiKeys')
 const { NAMESPACES } = require('../../../store')
+const { UnsupporterAPIVersionError } = require('../../../errors')
 
 const versions = {
   0: require('./v0'),
@@ -18,6 +19,10 @@ module.exports = () => ({
     maxVersion: 1,
   },
   encode: async ({ store, apiVersion, payload }) => {
+    if (!versions[apiVersion]) {
+      throw new UnsupporterAPIVersionError(apiKey, apiVersion)
+    }
+
     const topicsStore = store.get(NAMESPACES.TOPICS)
     const requestDecoder = requestDecoders[apiVersion]
     const { topics: requestedTopics } = await requestDecoder({ payload })
