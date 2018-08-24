@@ -33,3 +33,9 @@ jobs:
         - env
         - ./bin/buildLibraryTests.sh ruby_kafka
         - ./bin/runLibraryTests.sh ruby_kafka
+    - stage: test
+      name: 'Library tests: Java 0.11.0.2'
+      script:
+        - env
+        - ./bin/buildLibraryTests.sh java_0_11
+        - ./bin/runLibraryTests.sh java_0_11
