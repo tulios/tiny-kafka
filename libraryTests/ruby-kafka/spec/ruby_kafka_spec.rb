@@ -1,6 +1,6 @@
 require 'kafka'
 
-CMD_TINY_KAFKA = '../../bin/tiny-kafka'
+CMD_TINY_KAFKA = '../../bin/tiny-kafka start'
 
 RSpec.describe('ruby-kafka') do
   before(:all) do

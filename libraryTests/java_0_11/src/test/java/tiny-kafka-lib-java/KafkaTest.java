@@ -12,7 +12,7 @@ public class KafkaTest {
   @Test
   @DisplayName("Producer client 0.11.0.2")
   public void producer() throws Exception {
-    Process process = Runtime.getRuntime().exec("../../bin/tiny-kafka");
+    Process process = Runtime.getRuntime().exec("../../bin/tiny-kafka start");
     Thread.sleep(1000);
 
     Properties props = new Properties();
