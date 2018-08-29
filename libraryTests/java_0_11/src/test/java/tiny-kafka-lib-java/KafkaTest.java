@@ -1,13 +1,43 @@
 package tiny.kafka.lib.java;
 
 import java.util.Properties;
-import org.apache.kafka.clients.producer.Producer;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerRecord;
+import java.util.HashMap;
+import java.util.Arrays;
+import java.util.Map;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 
+import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.admin.AdminClientConfig;
+import org.apache.kafka.clients.admin.AdminClient;
+import org.apache.kafka.clients.admin.NewTopic;
+
 public class KafkaTest {
+
+  @Test
+  @DisplayName("Create topic 0.11.0.2")
+  public void createTopic() throws Exception {
+    Process process = Runtime.getRuntime().exec("../../bin/tiny-kafka start");
+    Thread.sleep(1000);
+
+    Properties config = new Properties();
+    config.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+
+    try {
+      AdminClient admin = AdminClient.create(config);
+
+      Map<String, String> configs = new HashMap<>();
+      short partitions = 1;
+      short replication = 1;
+
+      admin.createTopics(Arrays.asList(new NewTopic("topic", partitions, replication).configs(configs)));
+    } finally {
+      process.destroy();
+    }
+  }
 
   @Test
   @DisplayName("Producer client 0.11.0.2")
