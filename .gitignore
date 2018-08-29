@@ -7,4 +7,5 @@ yarn-error.log
 .vscode
 .vs
 **/java*/target/
-
+*.log
+*.error
