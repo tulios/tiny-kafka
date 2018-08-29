@@ -9,7 +9,7 @@ const PID_PATH = path.join(os.tmpdir(), PID_FILE)
 
 module.exports = () => {
   process.umask(0)
-  const server = new Server()
+  const server = new Server({ port: process.env.PORT })
 
   SIGNAL_TRAPS.map(type => {
     process.once(type, async () => {

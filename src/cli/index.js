@@ -9,7 +9,7 @@ module.exports = () => {
     .usage('Usage: $0 <command> [options]')
     .command({
       command: 'start',
-      desc: 'Start server',
+      desc: 'Start server. Use PORT to change the default port (9292)',
       builder: yargs => {
         yargs.option('detach', {
           alias: 'd',
