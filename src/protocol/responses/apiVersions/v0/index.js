@@ -5,6 +5,10 @@ const Encoder = require('kafkajs/src/protocol/encoder')
 const byApiKey = (a, b) => a.apiKey - b.apiKey
 let availableApis
 
+try {
+  availableApis = require('../../../availableApis.json')
+} catch (e) {}
+
 /**
  * ApiVersionResponse => ApiVersions
  *   ErrorCode = INT16

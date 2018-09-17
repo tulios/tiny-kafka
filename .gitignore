@@ -1,5 +1,6 @@
 .DS_Store
 node_modules
+dist
 test-report.xml
 junit.xml
 coverage/
@@ -9,3 +10,4 @@ yarn-error.log
 **/java*/target/
 *.log
 *.error
+src/availableApis.json

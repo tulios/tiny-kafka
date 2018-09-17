@@ -12,8 +12,10 @@ const {
   LOG_FILE_NAME,
 } = require('./constants')
 
+const RUNNING_ON_NODE = /node$/.test(process.execPath)
+const NODE_BIN_PATH = path.join(__dirname, BIN_FILE)
 const PID_PATH = path.join(os.tmpdir(), PID_FILE)
-const BIN_PATH = path.join(__dirname, BIN_FILE)
+const BIN_PATH = RUNNING_ON_NODE ? NODE_BIN_PATH : process.execPath
 
 const waitForChild = (pid, totalWait = 0) => {
   if (!fs.existsSync(PID_PATH)) {
@@ -32,7 +34,17 @@ module.exports = ({ log = false }) => {
   log ? stdio.push(fs.openSync(LOG_FILE_NAME, 'a')) : stdio.push('ignore')
   stdio.push(fs.openSync(ERROR_FILE_NAME, 'a'))
 
-  const child = spawn(BIN_PATH, ['start'], {
+  const cmdArgs = []
+
+  if (!RUNNING_ON_NODE) {
+    // pkg is removing the entrypoint so it has to be added again
+    // https://github.com/zeit/pkg/issues/376
+    cmdArgs.push(NODE_BIN_PATH)
+  }
+
+  cmdArgs.push('start')
+
+  const child = spawn(BIN_PATH, cmdArgs, {
     cwd: process.cwd(),
     env: process.env,
     detached: true,

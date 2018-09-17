@@ -1,4 +1,6 @@
-node_modules
+node_modules/
 **/java*/target/
 *.log
 *.error
+dist/
+src/availableApis.json

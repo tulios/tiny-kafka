@@ -16,9 +16,12 @@
   },
   "homepage": "https://github.com/tulios/tiny-kafka",
   "scripts": {
-    "test:local": "NODE_ENV=test ./node_modules/.bin/jest src/ --forceExit --detectOpenHandles",
+    "test:local": "rm -f ./src/availableApis.json && NODE_ENV=test ./node_modules/.bin/jest src/ --forceExit --detectOpenHandles",
     "test:local:watch": "yarn test:local --watch",
-    "test": "yarn test:local --ci --maxWorkers=4 --no-watchman"
+    "test": "yarn test:local --ci --maxWorkers=4 --no-watchman",
+    "test:binary": "NODE_ENV=test ./node_modules/.bin/jest pkgTests/",
+    "test:binary:ci": "rm -rf ./dist/ && yarn package && yarn test:binary",
+    "package": "./bin/scanAvailableApis.js && ./node_modules/.bin/pkg --out-path ./dist/ package.json"
   },
   "bin": {
     "tink-kafka": "./bin/tiny-kafka"
@@ -30,6 +33,17 @@
     "yargs": "^12.0.1"
   },
   "devDependencies": {
-    "jest": "^23.5.0"
+    "jest": "^23.5.0",
+    "pkg": "^4.3.4"
+  },
+  "pkg": {
+    "scripts": [
+      "bin/tiny-kafka"
+    ],
+    "targets": [
+      "node8-linux-x64",
+      "node8-macos-x64",
+      "node8-win-x64"
+    ]
   }
 }

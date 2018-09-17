@@ -39,3 +39,9 @@ jobs:
         - env
         - ./bin/buildLibraryTests.sh java_0_11
         - ./bin/runLibraryTests.sh java_0_11
+    - stage: test
+      name: 'Binary test'
+      script:
+        - env
+        - yarn install
+        - yarn test:binary:ci
