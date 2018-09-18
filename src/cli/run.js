@@ -1,21 +1,23 @@
 const os = require('os')
 const fs = require('fs')
+const net = require('net')
 const path = require('path')
 const { spawn } = require('child_process')
-const { PID_FILE, SIGNAL_TRAPS } = require('./constants')
+const { PID_PATH, SIGNAL_TRAPS } = require('./constants')
 const Server = require('../server')
 
-const PID_PATH = path.join(os.tmpdir(), PID_FILE)
-
-module.exports = () => {
+module.exports = ({ pid, port }) => {
   process.umask(0)
-  const server = new Server({ port: process.env.PORT })
+
+  const pidPath = pid || PID_PATH
+  const assignedPort = port || process.env.PORT
+  const server = new Server({ port: assignedPort })
 
   SIGNAL_TRAPS.map(type => {
     process.once(type, async () => {
       try {
         await server.close()
-        fs.unlinkSync(PID_PATH)
+        fs.unlinkSync(pidPath)
       } finally {
         process.kill(process.pid, type)
       }
@@ -25,8 +27,8 @@ module.exports = () => {
   server
     .listen()
     .then(() => {
-      fs.writeFileSync(PID_PATH, process.pid)
-      console.log(PID_PATH)
+      fs.writeFileSync(pidPath, process.pid)
+      console.log(pidPath)
     })
     .catch(e => true)
 }

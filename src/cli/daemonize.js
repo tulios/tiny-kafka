@@ -4,7 +4,7 @@ const path = require('path')
 const { spawn } = require('child_process')
 const stop = require('./stop')
 const {
-  PID_FILE,
+  PID_PATH,
   BIN_FILE,
   WAIT_TIME,
   MAX_WAIT_TIME,
@@ -14,23 +14,26 @@ const {
 
 const RUNNING_ON_NODE = /node$/.test(process.execPath)
 const NODE_BIN_PATH = path.join(__dirname, BIN_FILE)
-const PID_PATH = path.join(os.tmpdir(), PID_FILE)
 const BIN_PATH = RUNNING_ON_NODE ? NODE_BIN_PATH : process.execPath
 
-const waitForChild = (pid, totalWait = 0) => {
-  if (!fs.existsSync(PID_PATH)) {
+const waitForChild = (pid, pidPath, totalWait = 0) => {
+  if (!fs.existsSync(pidPath)) {
     if (totalWait >= MAX_WAIT_TIME) {
       console.error('Failed to start tiny-kafka, check ./tiny-kafka.error for more information')
       return process.exit(1)
     }
 
-    return setTimeout(() => waitForChild(pid, totalWait + WAIT_TIME), WAIT_TIME)
+    return setTimeout(() => waitForChild(pid, pidPath, totalWait + WAIT_TIME), WAIT_TIME)
   }
 }
 
-module.exports = ({ log = false }) => {
-  stop()
+module.exports = ({ log = false, pid = null, port }) => {
+  stop({ pid })
+
+  const pidPath = pid || PID_PATH
+  const assignedPort = port || process.env.PORT
   const stdio = ['ignore']
+
   log ? stdio.push(fs.openSync(LOG_FILE_NAME, 'a')) : stdio.push('ignore')
   stdio.push(fs.openSync(ERROR_FILE_NAME, 'a'))
 
@@ -42,7 +45,7 @@ module.exports = ({ log = false }) => {
     cmdArgs.push(NODE_BIN_PATH)
   }
 
-  cmdArgs.push('start')
+  cmdArgs.push('start', '--port', assignedPort, '--pid', pidPath)
 
   const child = spawn(BIN_PATH, cmdArgs, {
     cwd: process.cwd(),
@@ -53,6 +56,6 @@ module.exports = ({ log = false }) => {
   })
 
   child.unref()
-  waitForChild(child.pid)
+  waitForChild(child.pid, pidPath)
   process.stdout.write(`${child.pid}\r`)
 }

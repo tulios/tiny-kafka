@@ -1,5 +1,6 @@
 const yargs = require('yargs')
 
+const { PID_PATH } = require('./constants')
 const daemonize = require('./daemonize')
 const run = require('./run')
 const stop = require('./stop')
@@ -17,6 +18,17 @@ module.exports = () => {
           type: 'boolean',
           default: false,
         })
+        yargs.option('pid', {
+          describe: 'Path for the PID file',
+          type: 'string',
+          default: PID_PATH,
+        })
+        yargs.option('port', {
+          alias: 'p',
+          describe: 'Server port',
+          type: 'number',
+          default: 9292,
+        })
         yargs.option('log', {
           alias: 'l',
           describe: 'Log to ./tiny-kafka.log',
@@ -25,14 +37,21 @@ module.exports = () => {
         })
       },
       handler: argv => {
-        const { detach, log } = argv
-        detach ? daemonize({ log }) : run()
+        const { detach, pid, port, log } = argv
+        detach ? daemonize({ log, pid, port }) : run({ pid, port })
       },
     })
     .command({
       command: 'stop',
       desc: 'Stop server',
-      handler: argv => stop(),
+      builder: yargs => {
+        yargs.option('pid', {
+          describe: 'Path for the PID file',
+          type: 'string',
+          default: PID_PATH,
+        })
+      },
+      handler: argv => stop({ pid: argv.pid }),
     })
     .demandCommand()
     .strict()

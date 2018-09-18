@@ -1,16 +1,18 @@
 const os = require('os')
 const fs = require('fs')
 const path = require('path')
-const { PID_FILE } = require('./constants')
+const { PID_PATH } = require('./constants')
 
-const PID_PATH = path.join(os.tmpdir(), PID_FILE)
+module.exports = ({ pid }) => {
+  const pidPath = pid || PID_PATH
 
-module.exports = () => {
-  if (fs.existsSync(PID_PATH)) {
-    const pid = fs.readFileSync(PID_PATH)
+  if (fs.existsSync(pidPath)) {
+    const pidValue = fs.readFileSync(pidPath)
+
     try {
-      process.kill(pid)
+      process.kill(pidValue)
     } catch (_) {}
-    fs.unlinkSync(PID_PATH)
+
+    fs.unlinkSync(pidPath)
   }
 }
