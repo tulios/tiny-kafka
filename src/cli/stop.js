@@ -13,6 +13,9 @@ module.exports = ({ pid }) => {
       process.kill(pidValue)
     } catch (_) {}
 
-    fs.unlinkSync(pidPath)
+    // Check if the file exists again because on some targets pkg will execute
+    // the daemonized cmd using "sh -c" generating another shell. So the file will
+    // be deleted after killing the first process.
+    fs.existsSync(pidPath) && fs.unlinkSync(pidPath)
   }
 }
