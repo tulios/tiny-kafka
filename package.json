@@ -20,7 +20,7 @@
     "test:local:watch": "yarn test:local --watch",
     "test": "yarn test:local --ci --maxWorkers=4 --no-watchman",
     "test:binary": "./bin/warmUpTestBinary.js &> /dev/null && NODE_ENV=test ./node_modules/.bin/jest pkgTests/ --forceExit --detectOpenHandles",
-    "test:binary:ci": "rm -rf ./dist/ && yarn package && yarn test:binary",
+    "test:binary:ci": "rm -rf ./dist/ && yarn package --targets node8-linux-x64 && yarn test:binary",
     "package": "./bin/scanAvailableApis.js && ./node_modules/.bin/pkg --out-path ./dist/ package.json"
   },
   "bin": {
@@ -43,7 +43,7 @@
     "targets": [
       "node8-linux-x64",
       "node8-macos-x64",
-      "node8-win-x64"
+      "node8-alpine-x64"
     ]
   }
 }
