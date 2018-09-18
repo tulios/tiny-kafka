@@ -24,7 +24,7 @@ public class KafkaTest {
     Thread.sleep(1000);
 
     Properties config = new Properties();
-    config.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+    config.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
 
     try {
       AdminClient admin = AdminClient.create(config);
@@ -46,7 +46,7 @@ public class KafkaTest {
     Thread.sleep(1000);
 
     Properties props = new Properties();
-    props.put("bootstrap.servers", "localhost:9092");
+    props.put("bootstrap.servers", "127.0.0.1:9092");
     props.put("acks", "all");
     props.put("retries", 0);
     props.put("batch.size", 16384);

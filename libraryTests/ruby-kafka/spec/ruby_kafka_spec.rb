@@ -1,20 +1,21 @@
+require 'tmpdir'
 require 'kafka'
-
-CMD_TINY_KAFKA = '../../bin/tiny-kafka start'
 
 RSpec.describe('ruby-kafka') do
   before(:all) do
-    @pid = Thread.new { system(CMD_TINY_KAFKA) }.tap { |t| t.abort_on_exception = true }
+    @pidPath = File.join(Dir.tmpdir, 'tiny-kafka-ruby-kafka.pid')
+    cmd = "../../bin/tiny-kafka start --pid #{@pidPath}"
+    Thread.new { system(cmd) }.tap { |t| t.abort_on_exception = true }
     sleep(1)
   end
 
   after(:all) do
-    Thread.kill(@pid)
+    Process.kill('SIGINT', File.read(@pidPath).to_i)
   end
 
   it 'create topic' do
     kafka = Kafka.new(
-      ['localhost:9092'],
+      ['127.0.0.1:9092'],
       client_id: 'tiny-kafka-lib-ruby-kafka'
     )
 
@@ -23,7 +24,7 @@ RSpec.describe('ruby-kafka') do
 
   it 'produce' do
     kafka = Kafka.new(
-      ['localhost:9092'],
+      ['127.0.0.1:9092'],
       client_id: 'tiny-kafka-lib-ruby-kafka'
     )
 
