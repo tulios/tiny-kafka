@@ -27,7 +27,7 @@ module.exports = () => {
           alias: 'p',
           describe: 'Server port',
           type: 'number',
-          default: 9292,
+          default: 9092,
         })
         yargs.option('log', {
           alias: 'l',
