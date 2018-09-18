@@ -7,7 +7,7 @@ const exec = util.promisify(childProcess.exec)
 
 const { PID_FILE } = require('../src/cli/constants')
 
-const BINARY_NAME = process.platform === 'darwin' ? 'tiny-kafka-macos' : 'tiny-kafka-linux'
+const BINARY_NAME = process.platform === 'darwin' ? 'tiny-kafka-macos' : 'tiny-kafka'
 const BINARY = path.join(__dirname, '../dist', BINARY_NAME)
 
 const sleep = time => new Promise(resolve => setTimeout(resolve, time))
