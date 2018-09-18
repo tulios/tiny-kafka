@@ -14,7 +14,7 @@ const BEL = String.fromCharCode(7)
 const API_KEY_IDS = Object.keys(apiKeys)
 const getApiNameByKey = apiKey => API_KEY_IDS.find(key => apiKeys[key] === apiKey)
 
-const setProcessTitle = () => (process.title = 'TinyKafka')
+const setProcessTitle = () => (process.title = 'tiny-kafka')
 const setTerminalTitle = () => process.stdout.write(ESCAPE + ']0;' + process.title + BEL)
 
 const PRIVATE = {
